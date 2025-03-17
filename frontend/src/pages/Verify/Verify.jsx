@@ -1,38 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./verify.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { DOMAIN } from "../../config";
-import axios from "axios";
 import { toast } from "react-toastify";
+
 function Verify() {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const success = searchParams.get("success");
-  const orderId = searchParams.get("orderId");
-  const [loading, setLoading] = useState(false);
-  const verifyPayment = async () => {
-    const response = await axios.post(`${DOMAIN}/api/order/verify`, {
-      success,
-      orderId,
-    });
-    if (response.data.success) {
-      navigate("/myorders");
-      toast.success(response.data.message)
-    } else {
-      navigate("/");
-      toast.error(response.data.message)
-    }
-  };
 
   useEffect(() => {
-    verifyPayment();
-  }, []);
+    toast.info("Verifying payment...");
+
+    setTimeout(() => {
+      if (success === "true") {
+        toast.success("Payment verified successfully!");
+        navigate("/myorders");
+      } else {
+        toast.error("Payment verification failed.");
+        navigate("/");
+      }
+    }, 2000);
+  }, [navigate, success]);
+
   return (
-    <>
-      <div className="verify">
-        <div className="spinner"></div>
-      </div>
-    </>
+    <div className="verify">
+      <div className="spinner"></div>
+    </div>
   );
 }
 

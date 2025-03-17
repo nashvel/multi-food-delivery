@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./loginPopup.css";
 import { assets } from "../../assets/assets";
-import { DOMAIN } from "../../config";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { StoreContext } from "../../context/StoreContext";
+
 function LoginPopup({ setShowLogin }) {
   const { setToken, setEmail } = useContext(StoreContext);
   const [currState, setCurrState] = useState("Sign Up");
@@ -19,47 +17,26 @@ function LoginPopup({ setShowLogin }) {
   const onChangeHandler = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-
     setUserData((data) => ({ ...data, [name]: value }));
   };
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = (e) => {
     e.preventDefault();
-    if (currState === "Sign Up") {
-      setLoading(true);
-      const response = await axios.post(`${DOMAIN}/api/user/register`, {
-        name: userData.name,
-        email: userData.email,
-        password: userData.password,
-      });
-      if (response.data.success) {
-        // toast.success(response.data.message);
-        setToken(response.data.token);
-        localStorage.setItem("Token", response.data.token);
+    setLoading(true);
+
+    setTimeout(() => {
+      if (currState === "Sign Up") {
+        setToken("mock_token_123");
+        localStorage.setItem("Token", "mock_token_123");
         setCurrState("Login");
-        setLoading(false);
-      } else {
-        toast.error(response.data.message);
-        setLoading(false);
-      }
-    } else if (currState === "Login") {
-      setLoading(true);
-      const response = await axios.post(`${DOMAIN}/api/user/login`, {
-        email: userData.email,
-        password: userData.password,
-      });
-      if (response.data.success) {
-        // toast.success(response.data.message);
-        setEmail(response.data.email);
-        localStorage.setItem("Email", response.data.email);
-        localStorage.setItem("Token", response.data.token);
+      } else if (currState === "Login") {
+        setEmail(userData.email);
+        localStorage.setItem("Email", userData.email);
+        localStorage.setItem("Token", "mock_token_123");
         setShowLogin(false);
-        setLoading(false);
-      } else {
-        setLoading(false);
-        toast.error(response.data.message);
       }
-    }
+      setLoading(false);
+    }, 1500);
   };
 
   return (
@@ -68,14 +45,10 @@ function LoginPopup({ setShowLogin }) {
         <form className="login-container" onSubmit={onSubmitHandler}>
           <div className="login-title">
             <h2>{currState}</h2>
-            <img
-              onClick={() => setShowLogin(false)}
-              src={assets.cross_icon}
-              alt=""
-            />
+            <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="Close" />
           </div>
           <div className="login-inputs">
-            {currState === "Sign Up" ? (
+            {currState === "Sign Up" && (
               <input
                 name="name"
                 onChange={onChangeHandler}
@@ -84,21 +57,17 @@ function LoginPopup({ setShowLogin }) {
                 placeholder="Your name"
                 required
               />
-            ) : (
-              <></>
             )}
-            <div className={currState == "Sign Up" ? "email" : ""}>
-
-            <input
-              name="email"
-              onChange={onChangeHandler}
-              value={userData.email}
-              type="email"
-              placeholder="Your email"
-              required
-            />
-            {currState == "Sign Up" ? <span>Use valid emai to receive order details*</span>: <></>}
-            
+            <div className={currState === "Sign Up" ? "email" : ""}>
+              <input
+                name="email"
+                onChange={onChangeHandler}
+                value={userData.email}
+                type="email"
+                placeholder="Your email"
+                required
+              />
+              {currState === "Sign Up" && <span>Use a valid email to receive order details*</span>}
             </div>
             <div className="password">
               <input
@@ -106,43 +75,30 @@ function LoginPopup({ setShowLogin }) {
                 onChange={onChangeHandler}
                 value={userData.password}
                 type={showPassword ? "password" : "text"}
-                placeholder={
-                  currState === "Sign Up"
-                    ? "Set your password"
-                    : "Your password"
-                }
+                placeholder={currState === "Sign Up" ? "Set your password" : "Your password"}
                 required
               />
               <p onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? "show" : "hide"}
+                {showPassword ? "Show" : "Hide"}
               </p>
             </div>
           </div>
           <button type="submit">
-            {currState === "Sign Up"
-              ? `${!loading ? " Create account" : "Processing..."}`
-              : `${!loading ? " Login" : "Log in..."}`}
+            {loading ? (currState === "Sign Up" ? "Processing..." : "Logging in...") : currState}
           </button>
-          {currState === "Sign Up" ? (
+          {currState === "Sign Up" && (
             <div className="login-condition">
               <input type="checkbox" required />
               <p>By continuing, I agree to terms of use & privacy policy.</p>
             </div>
-          ) : (
-            <></>
           )}
 
-          {currState === "Sign Up" ? (
-            <p>
-              Already have an account?
-              <span onClick={() => setCurrState("Login")}>Login</span>
-            </p>
-          ) : (
-            <p>
-              Create a new account?{" "}
-              <span onClick={() => setCurrState("Sign Up")}>Sign up</span>
-            </p>
-          )}
+          <p>
+            {currState === "Sign Up" ? "Already have an account?" : "Create a new account?"}
+            <span onClick={() => setCurrState(currState === "Sign Up" ? "Login" : "Sign Up")}>
+              {currState === "Sign Up" ? "Login" : "Sign up"}
+            </span>
+          </p>
         </form>
       </div>
     </>

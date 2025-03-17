@@ -9,7 +9,7 @@ function Footer() {
           <div className="footer-content-left">
             <img src={assets.logo2} alt="logo" width={"290px"}/>
             <p>
-              Mumbai style chinese restaurant. Order food online. We only have one branch currently and deliver within the radius of 10km only.
+              Order food online. We only deliver within the radius of 10km only.
             </p>
             <div className="footer-social-icons">
               <img src={assets.facebook_icon} alt="fb" />
@@ -30,16 +30,16 @@ function Footer() {
             <h2>GET IN TOUCH</h2>
             <ul>
                 <li>+91 67690 98264</li>
-                <li>contact@thh.com</li>
-                <li>Salbari, Sukna, Siliguri, West Bengal, IN - 734001</li>
+                <li>contact@multi-food-cuisine.com</li>
+                <li>Tagoloan Community College</li>
             </ul>
           </div>
         </div>
         <hr />
         <p className="footer-copyright">
-            Copyright 2024 @ thh.com - All Right Reserved.
+            Copyright 2025 @ thh.com - All Right Reserved.
         </p>
-        <p>This project is purely for educational purposes, no real business transactions are involved. All food data is owned by The Hungry Helper Group.</p>
+        <p>This project is purely for educational purposes only.</p>
       </div>
     </>
   );

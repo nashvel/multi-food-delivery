@@ -6,9 +6,9 @@ function Header() {
       <div className="header">
         <div className="header-backdrop">
           <div className="header-content">
-          <h2>Mumbai style chinese restaurant.</h2>
+          <h2>Multi Delivery Food Cuisine</h2>
           <p>
-          Order delicious Chinese cuisine online now! Choose from a variety of options, including savory dumplings, flavorful stir-fries, aromatic noodle dishes, and more. Treat yourself to authentic flavors delivered straight to your door.
+          Order delicious cuisines online now! Choose from a variety of options, including savory dumplings, flavorful stir-fries, aromatic noodle dishes, and more. Treat yourself to authentic flavors delivered straight to your door.
           </p>
           <a href="#explore-menu"><button>View Menu &nbsp; &rarr;</button></a>
         </div> 

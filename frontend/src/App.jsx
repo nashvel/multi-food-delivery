@@ -29,15 +29,6 @@ function App() {
         theme="light"
         transition:Slide
       />
-      <div className="top-navbar">
-        <p>
-          Our bots are working hard to add new food items. 
-        </p>
-        <p>
-          We are currently using free servers to host backend, so please be
-          patient. 😊{" "}
-        </p>
-      </div>
       {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
       <div className="app">
         <Navbar setShowLogin={setShowLogin} />

@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+
+.navbar-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.8rem;
+  font-weight: 700; 
+  color: #210a06; 
+}
+
+
 .top-navbar{
     background-color: #323232;
     color: white;
