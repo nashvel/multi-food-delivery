@@ -1,7 +1,8 @@
-import React, { useState, useRef } from "react";
+
+import React, { useState, useRef, useEffect } from "react";
 import "./exploreMenu.css";
 import { menu_list } from "../../assets/assets";
-import "bootstrap-icons/font/bootstrap-icons.css"; // Import Bootstrap icons
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function ExploreMenu({ category, setCategory }) {
   const [location, setLocation] = useState(null);
@@ -14,7 +15,6 @@ function ExploreMenu({ category, setCategory }) {
 
   const handleLocateMe = () => {
     setShowMap(false);
-
     if (!navigator.geolocation) {
       setError("Geolocation is not supported by your browser.");
       return;
@@ -32,7 +32,6 @@ function ExploreMenu({ category, setCategory }) {
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
           );
           const data = await response.json();
-
           const locationName =
             data.address.city ||
             data.address.town ||
@@ -79,6 +78,17 @@ function ExploreMenu({ category, setCategory }) {
       ));
   };
 
+  // Prioritize categories for mobile
+  const prioritizedCategories = ["What's New?", "Best Sellers", "Noodles", "Beverages"];
+  const sortedMenuList = [...menu_list].sort((a, b) => {
+    const aIndex = prioritizedCategories.indexOf(a.menu_name);
+    const bIndex = prioritizedCategories.indexOf(b.menu_name);
+    if (aIndex === -1 && bIndex === -1) return 0;
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+    return aIndex - bIndex;
+  });
+
   return (
     <>
       <div className="explore-menu" id="explore-menu">
@@ -116,32 +126,32 @@ function ExploreMenu({ category, setCategory }) {
 
         <h1>Explore Our Exquisite Partners</h1>
         <p className="explore-menu-text">
-          Indulge in a fine selection of **authentic Korean & Asian cuisine**. From flavorful noodles to sizzling barbecue, each dish is crafted to perfection. Let your taste buds embark on a culinary journey!
+          Indulge in a fine selection of <strong>authentic Korean & Asian cuisine</strong>. From flavorful noodles to sizzling barbecue, each dish is crafted to perfection. Let your taste buds embark on a culinary journey!
         </p>
 
         <div className="explore-menu-list">
-  {menu_list.map((item, index) => {
-    const isUnavailable = item.menu_name === "Demo 2"; // Condition for unavailable
+          {sortedMenuList.map((item, index) => {
+            const isUnavailable = item.menu_name === "Demo 2"; // Condition for unavailable
 
-    return (
-      <div
-        onClick={() => !isUnavailable && handleCategoryClick(item.menu_name)}
-        key={`first-${index}`}
-        className={`explore-menu-list-item ${category === item.menu_name ? "active" : ""} ${isUnavailable ? "unavailable" : ""}`}
-      >
-        <img src={item.menu_image} alt="menu_image" className={`menu-image ${isUnavailable ? "bw-image" : ""}`} />
+            return (
+              <div
+                onClick={() => !isUnavailable && handleCategoryClick(item.menu_name)}
+                key={index}
+                className={`explore-menu-list-item ${category === item.menu_name ? "active" : ""} ${isUnavailable ? "unavailable" : ""}`}
+              >
+                <img src={item.menu_image} alt="menu_image" className={`menu-image ${isUnavailable ? "bw-image" : ""}`} />
 
-        <div className="restaurant-details">
-          <p><i className="bi bi-geo-alt-fill"></i> Location: Tagoloan</p>
-          <p><i className="bi bi-basket-fill"></i> Korean Foods</p>
-          <p><i className="bi bi-truck"></i> Free for First Order</p>
-        </div>
+                <div className="restaurant-details">
+                  <p><i className="bi bi-geo-alt-fill"></i> Location: Tagoloan</p>
+                  <p><i className="bi bi-basket-fill"></i> Korean Foods</p>
+                  <p><i className="bi bi-truck"></i> Free for First Order</p>
+                </div>
 
-        {!isUnavailable && <div className="rating">{renderStars()}</div>}
-        <p className="menu-title">{item.menu_name}</p>
-      </div>
-    );
-  })}
+                {!isUnavailable && <div className="rating">{renderStars()}</div>}
+                <p className="menu-title">{item.menu_name}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
 

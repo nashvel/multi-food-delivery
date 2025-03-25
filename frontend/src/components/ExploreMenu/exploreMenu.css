@@ -273,55 +273,149 @@
 }
 
 
-/* Responsive Map Adjustments */
-@media (max-width: 1050px) {
-    .map-container {
-        max-width: 100%;
-        height: 300px;
-    }
-}
-
+/* Mobile View */
 @media (max-width: 768px) {
-    .map-container {
-        height: 250px;
-    }
-}
-
-
-/* Responsive Design */
-@media (max-width: 1200px) {
     .explore-menu {
-        max-width: 100%;
-        padding: 0 20px;
+        gap: 12px;
+        padding: 0 8px;
+    }
+
+    .explore-menu h1 {
+        font-size: 18px;
     }
 
     .explore-menu-text {
-        max-width: 80%;
-        font-size: 14px;
+        font-size: 11px;
+        max-width: 100%;
     }
 
-    .address-input-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .locate-me-btn {
-        width: 100%;
-        max-width: 240px;
-    }
-
+    /* Category Sorting */
     .explore-menu-list {
-        flex-wrap: wrap;
-        justify-content: center;
+        gap: 10px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 8px;
+        scroll-snap-type: x mandatory;
     }
 
     .explore-menu-list-item {
-        width: 100%;
-        padding: 280px;
+        width: 140px;
+        padding: 8px;
+        font-size: 0.7rem;
+        scroll-snap-align: center;
     }
 
     .explore-menu-list-item img {
-        width: 260px;
+        width: 120px;
+        height: 90px;
+    }
+
+    .restaurant-details {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .restaurant-details p {
+        font-size: 0.4rem !important;
+    }
+
+    .rating {
+        gap: 2px;
+    }
+
+    .star-icon {
+        font-size: 12px;
+    }
+
+    .map-container {
         height: 180px;
+    }
+
+    .full-screen-card-container {
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+      }
+      
+      .full-screen-card-wrapper {
+        display: flex;
+        width: 200%;
+        height: 100%;
+        transition: transform 0.5s ease-in-out;
+      }
+      
+      .full-screen-card {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: linear-gradient(to right, #ff6b6b, #ffb3b3);
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+      
+      .demo-card {
+        background: linear-gradient(to right, #4b79a1, #283e51);
+      }
+      
+      .swipe-text {
+        font-size: 1rem;
+        margin-top: 20px;
+        opacity: 0.8;
+        animation: fadeIn 1.5s infinite alternate;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0.5;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      
+}
+
+/* Extra Small Devices */
+@media (max-width: 480px) {
+    .explore-menu h1 {
+        font-size: 16px;
+    }
+
+    .explore-menu-text {
+        font-size: 10px;
+    }
+
+    .address-input {
+        font-size: 13px;
+        padding: 8px 35px;
+    }
+
+    .locate-me-btn {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .explore-menu-list {
+        gap: 8px;
+    }
+
+    .explore-menu-list-item {
+        width: 130px;
+        padding: 7px;
+    }
+
+    .explore-menu-list-item img {
+        width: 110px;
+        height: 85px;
+    }
+
+    .map-container {
+        height: 160px;
     }
 }
