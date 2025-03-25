@@ -1,85 +1,76 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./myOrders.css";
+import { StoreContext } from "../../context/StoreContext";
 import { assets } from "../../assets/assets";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function MyOrders() {
+  const { food_list } = useContext(StoreContext);
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
 
-  // Mock orders for frontend-only testing
   useEffect(() => {
-    const mockOrders = [
-      {
-        id: 1,
-        items: [
-          { name: "Burger", quantity: 2 },
-          { name: "Fries", quantity: 1 },
-        ],
-        amount: 299,
-        status: "Preparing",
-        payment: false,
-        cod: true,
-      },
-      {
-        id: 2,
-        items: [{ name: "Pizza", quantity: 1 }],
-        amount: 499,
-        status: "Out for Delivery",
-        payment: true,
-        cod: false,
-      },
-    ];
-    setOrders(mockOrders);
+    const savedOrders = JSON.parse(localStorage.getItem("orders")) || [];
+    setOrders(savedOrders);
   }, []);
 
+  const clearOrders = () => {
+    localStorage.removeItem("orders"); // Clear orders from localStorage
+    setOrders([]); // Update state
+    toast.warn("All orders cleared!", { autoClose: 1000 }); // Show toast notification
+  };
+
   return (
-    <>
-      {orders.length === 0 ? (
-        <div className="my-order-signout">
-          <img src={assets.my_order} alt="Empty Orders" />
-          <p>Your Order history is empty.</p>
-        </div>
-      ) : (
-        <div className="my-orders">
-          <h2>My Orders</h2>
-          <div className="container">
-            {orders
-              .slice() // Prevent mutating original array
-              .reverse()
-              .map((order) => (
-                <div key={order.id} className="my-orders-order">
-                  <img src={assets.parcel_icon} alt="parcel" />
+    <div className="my-orders">
+      <h1>My Orders</h1>
 
-                  <p>
-                    {order.items
-                      .map((item) => `${item.name} x${item.quantity}`)
-                      .join(", ")}
-                  </p>
-                  <p>₱{order.amount}.00</p>
-                  <p>Items: {order.items.length}</p>
-                  <p>
-                    <span>&#x25cf;</span> &nbsp;
-                    <b>{order.status}</b>
-                  </p>
-
-                  {order.cod ? (
-                    <p>
-                      <b>Cash on Delivery</b>
-                    </p>
-                  ) : (
-                    <p>
-                      <b className="text-black">Paid</b>
-                    </p>
-                  )}
-                  <button onClick={() => toast.info("Tracking order...")}>
-                    Track Order
-                  </button>
-                </div>
-              ))}
-          </div>
-        </div>
+      {/* Clear Orders Button */}
+      {orders.length > 0 && (
+        <button className="clear-orders-btn" onClick={clearOrders}>
+          Clear Orders
+        </button>
       )}
-    </>
+
+      <div className="container">
+        {orders.length > 0 ? (
+          orders.map((order) => {
+            if (!order.items || !Array.isArray(order.items)) return null;
+
+            return (
+              <div key={order.id} className="my-orders-order">
+                <div className="order-header">
+                  <p><b>Order ID:</b> #{order.id}</p>
+                  <p><b>Date:</b> {order.date}</p>
+                  <p><b>Status:</b> <span>{order.status}</span></p>
+                  <p><b>Total:</b> ₱{order.total}</p>
+                </div>
+                <div className="order-items">
+                  {order.items.map((item) => (
+                    <div key={item.id} className="order-item">
+                      <img src={item.image} alt={item.name} />
+                      <p>{item.name}</p>
+                      <p>₱{item.price}</p>
+                      <p>{item.quantity}</p>
+                      <p>₱{item.price * item.quantity}</p>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => navigate(`/order/${order.id}`)}>
+                  View Details
+                </button>
+              </div>
+            );
+          })
+        ) : (
+          <div className="my-order-signout">
+            <img src={assets.empty_cart} alt="No Orders" />
+            <p>You have no orders yet.</p>
+            <p>Start shopping to see your orders here!</p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 

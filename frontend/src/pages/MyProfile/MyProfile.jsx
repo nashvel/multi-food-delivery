@@ -6,10 +6,11 @@ import { toast } from "react-toastify";
 
 function MyProfile() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("user@example.com"); // Mock email
-  const [name, setName] = useState("John Doe");
-  const [phone, setPhone] = useState("09123456789");
   
+  // Retrieve stored user details from LocalStorage
+  const [name, setName] = useState(localStorage.getItem("Name") || "Guest");
+  const [email, setEmail] = useState(localStorage.getItem("Email") || "user@example.com");
+  const [phone, setPhone] = useState("09123456789");
   const [apartmentNo, setApartmentNo] = useState("A-101");
   const [area, setArea] = useState("Downtown");
   const [street, setStreet] = useState("Main St.");
@@ -18,19 +19,30 @@ function MyProfile() {
 
   const [updateLoading, setUpdateLoading] = useState(false);
 
+  useEffect(() => {
+    // Update state when LocalStorage changes
+    setName(localStorage.getItem("Name") || "Guest");
+    setEmail(localStorage.getItem("Email") || "user@example.com");
+  }, []);
+
   const logout = () => {
     localStorage.removeItem("Token");
     localStorage.removeItem("Email");
+    localStorage.removeItem("Name");
     navigate("/");
   };
 
   const updateUser = (e) => {
     e.preventDefault();
     setUpdateLoading(true);
+    
+    // Store the updated name in LocalStorage
+    localStorage.setItem("Name", name);
+
     setTimeout(() => {
       toast.success("Profile updated successfully!");
       setUpdateLoading(false);
-    }, 1000); // Simulate delay
+    }, 1000);
   };
 
   return (
@@ -99,7 +111,8 @@ function MyProfile() {
             <button type="button" onClick={logout}>
               Logout
             </button>
-          </div>
+          </div>  
+            <h4>***map update comming soon***</h4>
         </form>
       </div>
     </div>

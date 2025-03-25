@@ -8,7 +8,7 @@ function AppDownload() {
         <p>For Better Experience Download<br />The Multi Cuisine App</p> 
         
         <div className="app-download-platform">
-          <img src={assets.play_store} alt="android" />
+          <img src={assets.play_store} alt="android" width="10px"/>
         </div>
       </div>
     </>

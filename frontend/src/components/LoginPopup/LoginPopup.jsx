@@ -1,64 +1,105 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./loginPopup.css";
-import { assets } from "../../assets/assets";
 import { StoreContext } from "../../context/StoreContext";
 
 function LoginPopup({ setShowLogin }) {
   const { setToken, setEmail } = useContext(StoreContext);
+  const navigate = useNavigate();
+  
   const [currState, setCurrState] = useState("Sign Up");
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
-    name: "",
+    name: "Nashvel", // Default name
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+
+  const predefinedAccounts = {
+    "client@gmail.com": "client",
+    "admin@gmail.com": "admin",
+  };
 
   const onChangeHandler = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
     setUserData((data) => ({ ...data, [name]: value }));
+    setError(""); 
   };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
     setLoading(true);
-
+    setError("");
+  
     setTimeout(() => {
       if (currState === "Sign Up") {
+        const finalName = userData.name.trim() || "Nashvel"; // Use "Nashvel" if empty
         setToken("mock_token_123");
         localStorage.setItem("Token", "mock_token_123");
+        localStorage.setItem("Email", userData.email);
+        localStorage.setItem("Password", userData.password);
+        localStorage.setItem("Name", finalName);
         setCurrState("Login");
       } else if (currState === "Login") {
-        setEmail(userData.email);
-        localStorage.setItem("Email", userData.email);
-        localStorage.setItem("Token", "mock_token_123");
-        setShowLogin(false);
+        const storedEmail = localStorage.getItem("Email");
+        const storedPassword = localStorage.getItem("Password");
+        const storedName = localStorage.getItem("Name");
+
+        if (userData.email in predefinedAccounts && userData.password === predefinedAccounts[userData.email]) {
+          setEmail(userData.email);
+          localStorage.setItem("Token", "mock_token_123");
+          localStorage.setItem("Name", storedName);
+          setShowLogin(false);
+
+          // Redirect based on role
+          if (userData.email === "client@gmail.com") {
+            navigate("/access/client");
+          } else if (userData.email === "admin@gmail.com") {
+            navigate("/");
+          }
+        } else if (userData.email === storedEmail && userData.password === storedPassword) {
+          setEmail(userData.email);
+          localStorage.setItem("Token", "mock_token_123");
+          localStorage.setItem("Name", storedName);
+          setShowLogin(false);
+        } else {
+          setError("Invalid email or password");
+        }
       }
       setLoading(false);
     }, 1500);
   };
 
   return (
-    <>
+    <div className="login-overlay">
       <div className="login">
         <form className="login-container" onSubmit={onSubmitHandler}>
-          <div className="login-title">
+          <div className="login-header">
             <h2>{currState}</h2>
-            <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="Close" />
+            <i
+              className="bi bi-x-lg close-icon"
+              onClick={() => setShowLogin(false)}
+            ></i>
           </div>
+
           <div className="login-inputs">
             {currState === "Sign Up" && (
-              <input
-                name="name"
-                onChange={onChangeHandler}
-                value={userData.name}
-                type="text"
-                placeholder="Your name"
-                required
-              />
+              <div className="input-group">
+                <i className="bi bi-person input-icon"></i>
+                <input
+                  name="name"
+                  onChange={onChangeHandler}
+                  value={userData.name}
+                  type="text"
+                  placeholder="Your name"
+                  required
+                />
+              </div>
             )}
-            <div className={currState === "Sign Up" ? "email" : ""}>
+            <div className="input-group">
+              <i className="bi bi-envelope input-icon"></i>
               <input
                 name="email"
                 onChange={onChangeHandler}
@@ -67,25 +108,33 @@ function LoginPopup({ setShowLogin }) {
                 placeholder="Your email"
                 required
               />
-              {currState === "Sign Up" && <span>Use a valid email to receive order details*</span>}
             </div>
-            <div className="password">
+            <div className="input-group">
+              <i className="bi bi-lock input-icon"></i>
               <input
                 name="password"
                 onChange={onChangeHandler}
                 value={userData.password}
-                type={showPassword ? "password" : "text"}
+                type={showPassword ? "text" : "password"}
                 placeholder={currState === "Sign Up" ? "Set your password" : "Your password"}
                 required
               />
-              <p onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? "Show" : "Hide"}
-              </p>
+              <button
+                type="button"
+                className="show-password"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+              </button>
             </div>
           </div>
-          <button type="submit">
-            {loading ? (currState === "Sign Up" ? "Processing..." : "Logging in...") : currState}
+
+          {error && <p className="error-message">{error}</p>}
+
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? <div className="spinner"></div> : currState}
           </button>
+
           {currState === "Sign Up" && (
             <div className="login-condition">
               <input type="checkbox" required />
@@ -93,7 +142,7 @@ function LoginPopup({ setShowLogin }) {
             </div>
           )}
 
-          <p>
+          <p className="toggle-state">
             {currState === "Sign Up" ? "Already have an account?" : "Create a new account?"}
             <span onClick={() => setCurrState(currState === "Sign Up" ? "Login" : "Sign Up")}>
               {currState === "Sign Up" ? "Login" : "Sign up"}
@@ -101,7 +150,7 @@ function LoginPopup({ setShowLogin }) {
           </p>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -1,9 +1,9 @@
 .cart{
     margin-top: 100px;
 }
-.cart-items-title{
+.cart-items-title {
     display: grid;
-    grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 0.5fr;
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 0.5fr; 
     align-items: center;
     color: grey;
     font-size: max(0.8vw, 16px);
@@ -88,6 +88,18 @@
    color: white;
    border-radius: 4px;
 }
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+  }
+  
 .promo-info{
     padding: 15px;
     margin-top: 30px;
@@ -113,6 +125,24 @@
     font-size: 17px;
 }
 
+.checkout-btn {
+    display: inline-block; /* or block */
+}
+
+.radio-options {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+  }
+  
+  .radio-options label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+  
+
 @media (max-width: 750px) {
     .cart-bottom{
         flex-direction: column-reverse;
@@ -131,4 +161,28 @@
         height: 40px;
         object-fit: cover;
     }
+    .quantity-controls {
+        display: flex; /* Ensure flexbox is used */
+        align-items: center; /* Vertically center the number and buttons */
+        gap: 10px; /* Add spacing between the number and buttons */
+    }
+    
+    .quantity-buttons {
+        display: flex;
+        gap: 5px; /* Add spacing between the + and - buttons */
+    }
+    
+    .quantity-controls button {
+        padding: 5px 10px; /* Adjust button padding */
+        font-size: 16px; /* Adjust button font size */
+        cursor: pointer;
+        border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+        background-color: #f9f9f9; /* Optional: Add a background color */
+        border-radius: 4px; /* Optional: Add rounded corners */
+    }
+    
+    .quantity-controls p {
+        margin: 0; /* Remove default margin for the number */
+    }
+      
 }

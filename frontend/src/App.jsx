@@ -6,17 +6,19 @@ import PlaceOrder from "./pages/PlaceOrder/PlaceOrder";
 import Footer from "./components/Footer/Footer";
 import { useState } from "react";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Verify from "./pages/Verify/Verify";
 import MyOrders from "./pages/Myorders/MyOrders";
 import MyProfile from "./pages/MyProfile/MyProfile";
+import "bootstrap/dist/css/bootstrap.min.css";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop"; 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
 
   return (
     <>
-     <ToastContainer
+      <ToastContainer
         position="bottom-center"
         autoClose={3000}
         hideProgressBar
@@ -27,9 +29,12 @@ function App() {
         draggable
         pauseOnHover={false}
         theme="light"
-        transition:Slide
+        transition={Slide} 
       />
-      {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
+      {showLogin && <LoginPopup setShowLogin={setShowLogin} />} 
+      
+      <ScrollToTop /> 
+      
       <div className="app">
         <Navbar setShowLogin={setShowLogin} />
         <Routes>

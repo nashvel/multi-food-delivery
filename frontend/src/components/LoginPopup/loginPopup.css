@@ -7,6 +7,13 @@
     display: grid;
 }
 
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
 .login-container {
     place-self: center;
     width: max(23vw, 330px);
@@ -14,11 +21,12 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 20px;
     padding: 25px 30px;
     border-radius: 8px;
     font-size: 14px;
-    animation: fade-in .5s;
+    animation: fade-in 0.5s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .login-title {
@@ -27,26 +35,26 @@
     align-items: center;
     color: black;
 }
-.email{
-    position: relative;
-    margin-bottom: 10px;
+
+.login-title h2 {
+    margin: 0;
+    font-size: 24px;
 }
-.email span{
-    text-align: right;
-    position: absolute;
-    bottom: -20px;
-    right: 0;
-}
+
 .login-title img {
     width: 16px;
     cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.login-title img:hover {
+    transform: scale(1.1);
 }
 
 .login-inputs {
     display: flex;
     flex-direction: column;
     gap: 20px;
-
 }
 
 .login-inputs input {
@@ -56,16 +64,31 @@
     border: 1px solid #c9c9c9;
     border-radius: 4px;
     font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+.login-inputs input:focus {
+    border-color: tomato;
 }
 
 .login-container button {
     border: none;
-    padding: 10px;
+    padding: 12px;
     background-color: tomato;
     color: white;
     font-size: 15px;
     cursor: pointer;
     border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.login-container button:hover {
+    background-color: #ff6347;
+}
+
+.login-container button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
 .login-condition {
@@ -74,10 +97,12 @@
     gap: 8px;
     margin-top: 8px;
 }
-.login-condition input{
+
+.login-condition input {
     transform: scale(1.1);
     cursor: pointer;
 }
+
 .password {
     position: relative;
 }
@@ -89,11 +114,18 @@
     right: 10px;
     bottom: 50%;
     transform: translateY(50%);
+    color: tomato;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.login-inputs p:hover {
+    color: #ff6347;
 }
 
 .login p {
-
     font-size: 15px;
+    text-align: center;
 }
 
 .login p span {
@@ -101,4 +133,29 @@
     color: tomato;
     font-weight: 500;
     cursor: pointer;
+    transition: color 0.3s;
+}
+
+.login p span:hover {
+    color: #ff6347;
+}
+
+/* Loading Spinner */
+.spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

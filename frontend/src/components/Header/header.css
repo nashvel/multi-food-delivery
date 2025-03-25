@@ -2,13 +2,17 @@
 .header {
     height: 34vw;
     margin: 30px auto;
-    background: url("../../assets/header_img.png") ;
+    background: url("../../assets/header-img.png"); 
     border-radius: 20px;
-    background-size: cover;
+    background-size: 100% auto; 
+    background-position: center center; 
+    background-repeat: no-repeat;
     position: relative;
     overflow: hidden;
-    background-repeat: no-repeat;
+    image-rendering: crisp-edges; 
+    image-rendering: -webkit-optimize-contrast; 
 }
+
 .header-backdrop{
     backdrop-filter:brightness(0.7);
     width: 100%;

@@ -41,6 +41,16 @@ const StoreContextProvider = (props) => {
     }, 0);
   };
 
+  const removeAllFromCart = (itemId) => {
+    setCartItems((prev) => {
+      const updatedCart = { ...prev };
+      delete updatedCart[itemId]; // Remove the item completely
+      return updatedCart;
+    });
+  
+    toast.warn("All items removed from cart", { autoClose: 1000 });
+  };
+
   const applyPromoC = (x) => setPromoApplied(x);
 
   useEffect(() => {
@@ -48,6 +58,11 @@ const StoreContextProvider = (props) => {
       setCartItems(JSON.parse(localStorage.getItem("cart")));
     }
   }, []);
+
+  const clearCart = () => {
+    setCartItems({});
+    localStorage.removeItem("cart"); // Clears cart from localStorage
+  };
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -59,6 +74,8 @@ const StoreContextProvider = (props) => {
     setCartItems,
     addToCart,
     removeFromCart,
+    removeAllFromCart,
+    clearCart,
     getTotalCartAmount,
     token,
     setToken,
